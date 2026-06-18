@@ -11,9 +11,9 @@ namespace ECommerce.Tests
             var producto = new Product
             {
                 Id = 1,
-                Name = "Laptop",
-                Price = 1500m,
-                Stock = 5
+                Name = "Nike Air Max 90",
+                Price = 459.90m,
+                Stock = 25
             };
 
             Assert.True(producto.EstaEnStock());
@@ -25,8 +25,8 @@ namespace ECommerce.Tests
             var producto = new Product
             {
                 Id = 2,
-                Name = "Mouse",
-                Price = 50m,
+                Name = "Adidas Ultraboost 22",
+                Price = 699.90m,
                 Stock = 0
             };
 
