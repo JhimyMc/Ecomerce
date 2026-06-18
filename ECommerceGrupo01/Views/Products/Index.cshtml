@@ -2,151 +2,189 @@
 @model IEnumerable<Product>
 
 @{
-    ViewData["Title"] = "Productos";
+    ViewData["Title"] = "Tienda";
 }
 
-<!-- NAVBAR SOLO EN PRODUCTOS -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">SYSTEMCUSCO</a>
+<!-- SEARCH & FILTERS -->
+<div class="mb-4">
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+            <form method="get" asp-action="Index" asp-controller="Products" class="row g-3 align-items-end">
+                <div class="col-lg-5 col-md-12">
+                    <label class="form-label fw-bold small text-muted">
+                        <i class="ti ti-search"></i> Buscar zapatilla
+                    </label>
+                    <input type="text" name="search" value="@ViewBag.CurrentSearch"
+                           class="form-control form-control-lg border-2"
+                           placeholder="Ej: Nike Air Max, Adidas Ultraboost..." />
+                </div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+                <div class="col-lg-3 col-md-4">
+                    <label class="form-label fw-bold small text-muted">
+                        <i class="ti ti-tag"></i> Marca
+                    </label>
+                    <select name="brand" class="form-select form-select-lg border-2">
+                        <option value="">Todas las marcas</option>
+                        @if (ViewBag.Brands != null)
+                        {
+                            foreach (string b in ViewBag.Brands)
+                            {
+                                <option value="@b" selected="@(ViewBag.CurrentBrand == b)">@b</option>
+                            }
+                        }
+                    </select>
+                </div>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
+                <div class="col-lg-2 col-md-4">
+                    <label class="form-label fw-bold small text-muted">
+                        <i class="ti ti-currency-dollar"></i> Precio min
+                    </label>
+                    <input type="number" name="minPrice" value="@ViewBag.CurrentMinPrice"
+                           class="form-control form-control-lg border-2" placeholder="S/ 0" min="0" step="10" />
+                </div>
 
-                </li>
+                <div class="col-lg-2 col-md-4">
+                    <label class="form-label fw-bold small text-muted">
+                        <i class="ti ti-currency-dollar"></i> Precio max
+                    </label>
+                    <input type="number" name="maxPrice" value="@ViewBag.CurrentMaxPrice"
+                           class="form-control form-control-lg border-2" placeholder="S/ 9999" min="0" step="10" />
+                </div>
 
-                @if (User.Identity.IsAuthenticated)
-                {
-
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Products" asp-action="Index">
-                            <i class="bi bi-shop"></i> Productos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Checkout" asp-action="History">
-                            <i class="bi bi-receipt"></i> Mis pedidos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Cart" asp-action="Index">
-                            <i class="bi bi-cart3"></i> Carrito de Compras
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit();">
-                            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-                        </a>
-                        <form asp-area="Identity" asp-page="/Account/Logout" method="post" id="logoutForm" class="d-none">
-                        </form>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
-                            <i class="bi bi-box-arrow-in-right"></i> Iniciar sesión
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">
-                            <i class="bi bi-person-plus"></i> Registrarse
-                        </a>
-                    </li>
-                }
-
-                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link text-danger" asp-area="Admin" asp-controller="Admin" asp-action="Index">
-                            <i class="bi bi-gear"></i> Panel Admin
-                        </a>
-                    </li>
-                }
-            </ul>
+                <div class="col-lg-12 d-flex gap-2 mt-2">
+                    <button type="submit" class="btn btn-lg fw-bold" style="background-color:#CC0000; color:#fff;">
+                        <i class="ti ti-search"></i> Buscar
+                    </button>
+                    <a asp-action="Index" asp-controller="Products" class="btn btn-outline-secondary btn-lg">
+                        <i class="ti ti-refresh"></i> Limpiar
+                    </a>
+                </div>
+            </form>
         </div>
-    </div>
-</nav>
-
-<!-- LISTADO DE PRODUCTOS -->
-<div class="container">
-    <h1 class="mb-4 text-center">🛍️ Catálogo de productos</h1>
-
-    <div class="row">
-        @if (!Model.Any())
-        {
-            <div class="col-12">
-                <div class="alert alert-info text-center">
-                    No hay productos disponibles en este momento.
-                    <a asp-controller="Home" asp-action="Index" class="alert-link">Volver al inicio</a>
-                </div>
-            </div>
-        }
-        else
-        {
-            foreach (var product in Model)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                    <div class="card h-100 shadow-sm border-0">
-                        <img src="@(string.IsNullOrEmpty(product.ImagePath) ? Url.Content("~/imagenes/no-image.png") : product.ImagePath)"
-                            class="card-img-top rounded-top" style="object-fit:cover; height:200px;" alt="@product.Name" />
-
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-truncate" title="@product.Name">@product.Name</h5>
-
-                            <p class="card-text text-muted text-truncate" title="@product.Description">
-                                @product.Description
-                            </p>
-
-                            <div class="mt-auto">
-                                <p class="h5 fw-bold text-success mb-3">
-                                    @string.Format(System.Globalization.CultureInfo.GetCultureInfo("es-PE"), "{0:C}",
-                                    product.Price)
-                        </p>
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
-                                class="btn btn-outline-secondary btn-sm">
-                                <i class="bi bi-eye"></i> Ver
-                            </a>
-
-                            <form asp-controller="Cart" asp-action="Add" method="post"
-                                class="d-flex align-items-center">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="productId" value="@product.Id" />
-                                <input type="number" name="qty" value="1" min="1"
-                                    class="form-control form-control-sm me-2" style="width:70px;" />
-                                <button type="submit" class="btn btn-primary btn-sm">
-                                    <i class="bi bi-cart-plus"></i> Agregar
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-footer text-muted small text-center">
-                    <i class="bi bi-box-seam"></i> Stock:
-                    <span class="fw-bold @(product.Stock > 0 ? "text-success" : "text-danger")">
-                        @product.Stock
-                    </span>
-                </div>
-            </div>
-        </div>
-                }
-        }
     </div>
 </div>
 
+<!-- SECTION TITLE -->
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <h2 class="fw-black mb-0">
+        <i class="ti ti-shopping-bag" style="color:#CC0000;"></i> Catalogo de Zapatillas
+    </h2>
+    <span class="badge" style="background-color:#CC0000; color:#fff; font-size:0.9rem;">
+        @(Model?.Count() ?? 0) productos
+    </span>
+</div>
+<hr class="mt-2" style="border-color:#CC0000; border-width:2px;" />
 
+<!-- PRODUCT GRID -->
+@if (Model == null || !Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="ti ti-package-off" style="font-size:4rem; color:#ccc;"></i>
+        <h4 class="mt-3 text-muted">No se encontraron zapatillas</h4>
+        <p class="text-muted">Intenta con otros filtros o <a asp-action="Index">limpia la busqueda</a></p>
+    </div>
+}
+else
+{
+    <div class="row g-4 mb-4">
+        @foreach (var product in Model)
+        {
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden product-card">
+                    <div class="position-relative">
+                        <img src="@(string.IsNullOrEmpty(product.ImagePath) ? "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop" : product.ImagePath)"
+                             class="card-img-top" style="height:220px; object-fit:cover;" alt="@product.Name" />
+                        @if (product.Stock > 0 && product.Stock <= 5)
+                        {
+                            <span class="badge position-absolute top-0 end-0 m-2" style="background-color:#CC0000; color:#fff;">
+                                <i class="ti ti-alert-triangle"></i> Ultimas @product.Stock
+                            </span>
+                        }
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="card-title fw-bold text-truncate" title="@product.Name">@product.Name</h6>
+                        <p class="card-text text-muted small flex-grow-1" style="display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                            @product.Description
+                        </p>
+                        <div class="mt-auto">
+                            <p class="fw-black mb-2" style="font-size:1.25rem; color:#CC0000;">
+                                @string.Format(new System.Globalization.CultureInfo("es-PE"), "{0:C}", product.Price)
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
+                                   class="btn btn-outline-dark btn-sm flex-fill">
+                                    <i class="ti ti-eye"></i> Ver
+                                </a>
+                                <form asp-controller="Cart" asp-action="Add" method="post" class="flex-fill">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <input type="hidden" name="qty" value="1" />
+                                    <button type="submit" class="btn btn-sm w-100 fw-bold" style="background-color:#CC0000; color:#fff;">
+                                        <i class="ti ti-shopping-cart-plus"></i> Agregar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0">
+                        <small class="text-muted">
+                            <i class="ti ti-box-seam"></i> Stock:
+                            <span class="fw-bold @(product.Stock > 0 ? "text-success" : "text-danger")">@(product.Stock > 0 ? product.Stock + " disponibles" : "Agotado")</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 
+    <!-- PAGINATION -->
+    @if ((int)ViewBag.TotalPages > 1)
+    {
+        <nav class="mt-4 d-flex justify-content-center">
+            <ul class="pagination pagination-lg">
+                <li class="page-item @((int)ViewBag.CurrentPage <= 1 ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-controller="Products"
+                       asp-route-page="@((int)ViewBag.CurrentPage - 1)"
+                       asp-route-search="@ViewBag.CurrentSearch"
+                       asp-route-brand="@ViewBag.CurrentBrand"
+                       asp-route-minPrice="@ViewBag.CurrentMinPrice"
+                       asp-route-maxPrice="@ViewBag.CurrentMaxPrice">
+                        <i class="ti ti-chevron-left"></i>
+                    </a>
+                </li>
+                @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @((int)ViewBag.CurrentPage == i ? "active" : "")">
+                        <a class="page-link" asp-action="Index" asp-controller="Products"
+                           asp-route-page="@i"
+                           asp-route-search="@ViewBag.CurrentSearch"
+                           asp-route-brand="@ViewBag.CurrentBrand"
+                           asp-route-minPrice="@ViewBag.CurrentMinPrice"
+                           asp-route-maxPrice="@ViewBag.CurrentMaxPrice"
+                           style="@((int)ViewBag.CurrentPage == i ? "background-color:#CC0000; border-color:#CC0000; color:#fff;" : "")">
+                            @i
+                        </a>
+                    </li>
+                }
+                <li class="page-item @((int)ViewBag.CurrentPage >= (int)ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" asp-action="Index" asp-controller="Products"
+                       asp-route-page="@((int)ViewBag.CurrentPage + 1)"
+                       asp-route-search="@ViewBag.CurrentSearch"
+                       asp-route-brand="@ViewBag.CurrentBrand"
+                       asp-route-minPrice="@ViewBag.CurrentMinPrice"
+                       asp-route-maxPrice="@ViewBag.CurrentMaxPrice">
+                        <i class="ti ti-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+}
 
-
-
-<!--  -->
+<style>
+    .product-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.12) !important; }
+    .page-link { color: #333; border-color: #dee2e6; }
+    .page-item.active .page-link { background-color: #CC0000; border-color: #CC0000; color: #fff; }
+    .page-link:hover { background-color: #f0f0f0; color: #CC0000; }
+</style>

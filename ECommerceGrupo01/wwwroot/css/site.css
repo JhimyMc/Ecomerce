@@ -1,22 +1,62 @@
-html {
-  font-size: 14px;
+:root {
+  --joefar-black: #111111;
+  --joefar-red: #CC0000;
+  --joefar-red-dark: #990000;
+  --joefar-white: #FFFFFF;
+  --joefar-light: #F5F5F5;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
+html { font-size: 14px; }
+@media (min-width: 768px) { html { font-size: 16px; } }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
+html { position: relative; min-height: 100%; }
 
 body {
   margin-bottom: 60px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--joefar-light);
+  color: var(--joefar-black);
 }
+
+a { color: var(--joefar-red); text-decoration: none; }
+a:hover { color: var(--joefar-red-dark); }
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--joefar-red);
+}
+
+.btn-primary { background-color: var(--joefar-red); border-color: var(--joefar-red); color: #fff; }
+.btn-primary:hover { background-color: var(--joefar-red-dark); border-color: var(--joefar-red-dark); color: #fff; }
+
+.navbar-dark { background-color: var(--joefar-black) !important; }
+.navbar-brand { font-weight: 900; font-size: 1.4rem; letter-spacing: 2px; text-transform: uppercase; color: var(--joefar-white) !important; }
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+  background-color: var(--joefar-black);
+  color: var(--joefar-white);
+}
+.footer a { color: var(--joefar-red); }
+
+.card { border: none; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); }
+.card-title { color: var(--joefar-black); font-weight: 700; }
+
+.table-dark { background-color: var(--joefar-black) !important; }
+.carousel-caption { background: rgba(0, 0, 0, 0.7) !important; }
+
+.joefar-price { color: var(--joefar-red); font-weight: 700; }
+.badge.bg-danger { background-color: var(--joefar-red) !important; }
+
+/* Form styling */
+.form-control:focus, .form-select:focus {
+  border-color: var(--joefar-red) !important;
+  box-shadow: 0 0 0 0.15rem rgba(204, 0, 0, 0.15) !important;
+}
+
+/* Carousel overrides */
+.carousel-indicators [data-bs-target] { background-color: var(--joefar-red); }

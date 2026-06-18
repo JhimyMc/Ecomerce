@@ -129,6 +129,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// 🏪 Sembrar productos de zapatillas si la BD está vacía
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    DbSeeder.Seed(db);
+}
+
 app.Run();
 
 
