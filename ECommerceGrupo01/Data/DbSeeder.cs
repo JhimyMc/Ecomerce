@@ -72,6 +72,54 @@ namespace ECommerce.Data
                     Stock = 12,
                     Description = "Máxima estabilidad y amortiguación con tecnología GEL y FF BLAST+. Ideal para corredores que necesitan soporte.",
                     ImagePath = "/images/kayano30.jpg"
+                },
+                new Product
+                {
+                    Name = "Under Armour HOVR Phantom 3",
+                    Price = 649.90m,
+                    Stock = 16,
+                    Description = "Zapatillas de running con tecnología UA HOVR que devuelve la energía en cada zancada. Malla de soporte y suela de goma duradera.",
+                    ImagePath = "/images/hovrphantom3.jpg"
+                },
+                new Product
+                {
+                    Name = "Fila Disruptor 2 Premium",
+                    Price = 399.90m,
+                    Stock = 28,
+                    Description = "El clásico chunky de los 90s regresado con fuerza. Suela platform extra alta con el logo Fila bordado y acolchado cómodo.",
+                    ImagePath = "/images/disruptor2.jpg"
+                },
+                new Product
+                {
+                    Name = "Reebok Club C 85 Vintage",
+                    Price = 379.90m,
+                    Stock = 32,
+                    Description = "Minimalismo y elegancia en cuero blanco premium. Plantilla OrthoLite y suela de goma con detalles vintage que enamoran.",
+                    ImagePath = "/images/clubc85.jpg"
+                },
+                new Product
+                {
+                    Name = "Vans Old Skool Classic",
+                    Price = 299.90m,
+                    Stock = 45,
+                    Description = "La silueta Vans original con la icónica franja lateral jazz stripe. Canvas y gamuza con suela waffle para máximo grip.",
+                    ImagePath = "/images/oldskool.jpg"
+                },
+                new Product
+                {
+                    Name = "Adidas Superstar Foundation",
+                    Price = 459.90m,
+                    Stock = 20,
+                    Description = "El ícono del calzado urbano desde 1969. Coraza de concha protectora, cuero liso y las 3 franjas clásicas que nunca fallan.",
+                    ImagePath = "/images/superstar.jpg"
+                },
+                new Product
+                {
+                    Name = "Salomon XT-6 Advanced",
+                    Price = 849.90m,
+                    Stock = 10,
+                    Description = "Trail running de alta gama con tecnología Advanced Chassis y suela Contagrip MA. Diseño futurista resistente al agua.",
+                    ImagePath = "/images/xt6.jpg"
                 }
             );
 
